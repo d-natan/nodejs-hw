@@ -34,7 +34,7 @@ export const createNoteSchema = Joi.object({
     .optional(),
 });
 
-export const updateNoteSchema = Joi.object({
+export const updateNoteSchema = {
   params: Joi.object({
     noteId: Joi.string().custom((value, helpers) => {
       if (!isValidObjectId(value)) {
@@ -54,4 +54,4 @@ export const updateNoteSchema = Joi.object({
       .valid(...TAGS)
       .optional(),
   }).min(1),
-});
+};
