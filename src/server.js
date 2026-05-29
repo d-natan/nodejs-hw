@@ -12,6 +12,8 @@ import { logger } from './middleware/logger.js';
 import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
+import { errors } from 'celebrate';
+
 const PORT = process.env.PORT || 3000;
 
 const bootstrap = async () => {
@@ -26,6 +28,8 @@ const bootstrap = async () => {
   app.use(express.json());
 
   app.use(notesRoutes);
+
+  app.use(errors());
 
   app.use(notFoundHandler);
 
