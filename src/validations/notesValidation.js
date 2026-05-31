@@ -1,41 +1,47 @@
-import { Joi } from 'celebrate';
+import { Joi, Segments } from 'celebrate';
 import { isValidObjectId } from 'mongoose';
 import { TAGS } from '../constants/tags.js';
 
-export const getAllNotesSchema = Joi.object({
-  page: Joi.number().integer().min(1).default(1),
+export const getAllNotesSchema = {
+  [Segments.QUERY]: Joi.object({
+    page: Joi.number().integer().min(1).default(1),
 
-  perPage: Joi.number().integer().min(5).max(20).default(10),
+    perPage: Joi.number().integer().min(5).max(20).default(10),
 
-  tag: Joi.string()
-    .valid(...TAGS)
-    .optional(),
+    tag: Joi.string()
+      .valid(...TAGS)
+      .optional(),
 
-  search: Joi.string().allow('').optional(),
-});
-
-export const noteIdSchema = Joi.object({
-  noteId: Joi.string().custom((value, helpers) => {
-    if (!isValidObjectId(value)) {
-      return helpers.message('Invalid note id');
-    }
-
-    return value;
+    search: Joi.string().allow('').optional(),
   }),
-});
+};
 
-export const createNoteSchema = Joi.object({
-  title: Joi.string().min(1).required(),
+export const noteIdSchema = {
+  [Segments.PARAMS]: Joi.object({
+    noteId: Joi.string().custom((value, helpers) => {
+      if (!isValidObjectId(value)) {
+        return helpers.message('Invalid note id');
+      }
 
-  content: Joi.string().allow('').optional(),
+      return value;
+    }),
+  }),
+};
 
-  tag: Joi.string()
-    .valid(...TAGS)
-    .optional(),
-});
+export const createNoteSchema = {
+  [Segments.BODY]: Joi.object({
+    title: Joi.string().min(1).required(),
+
+    content: Joi.string().allow('').optional(),
+
+    tag: Joi.string()
+      .valid(...TAGS)
+      .optional(),
+  }),
+};
 
 export const updateNoteSchema = {
-  params: Joi.object({
+  [Segments.PARAMS]: Joi.object({
     noteId: Joi.string().custom((value, helpers) => {
       if (!isValidObjectId(value)) {
         return helpers.message('Invalid note id');
@@ -45,13 +51,11 @@ export const updateNoteSchema = {
     }),
   }),
 
-  body: Joi.object({
-    title: Joi.string().min(1).optional(),
+  [Segments.BODY]: Joi.object({
+    title: Joi.string().min(1),
 
-    content: Joi.string().allow('').optional(),
+    content: Joi.string().allow(''),
 
-    tag: Joi.string()
-      .valid(...TAGS)
-      .optional(),
+    tag: Joi.string().valid(...TAGS),
   }).min(1),
 };
