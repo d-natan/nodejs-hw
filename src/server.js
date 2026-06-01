@@ -15,6 +15,8 @@ import { logger } from './middleware/logger.js';
 import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
+import userRoutes from './routes/userRoutes.js';
+
 const PORT = process.env.PORT || 3000;
 
 const bootstrap = async () => {
@@ -33,7 +35,7 @@ const bootstrap = async () => {
   app.use(authRoutes);
 
   app.use(notesRoutes);
-
+  app.use(userRoutes);
   app.use(errors());
 
   app.use(notFoundHandler);
