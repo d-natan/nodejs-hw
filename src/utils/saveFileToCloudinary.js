@@ -3,9 +3,7 @@ import streamifier from 'streamifier';
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-
   api_key: process.env.CLOUDINARY_API_KEY,
-
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
@@ -15,6 +13,9 @@ export const saveFileToCloudinary = (buffer, userId) =>
       {
         folder: 'avatars',
         public_id: String(userId),
+        resource_type: 'image',
+        overwrite: true,
+        unique_filename: false,
       },
       (error, result) => {
         if (error) {
